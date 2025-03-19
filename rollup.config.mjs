@@ -8,6 +8,7 @@ import postcss from 'rollup-plugin-postcss';
 import url from '@rollup/plugin-url';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import json from '@rollup/plugin-json';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +16,7 @@ const __dirname = path.dirname(__filename);
 import pkg from './package.json' assert { type: 'json' };
 
 export default {
-    input: 'src/index.ts',
+    input: 'src/index.tsx',
     output: [
         {
             file: pkg.main,
@@ -32,6 +33,7 @@ export default {
     ],
     plugins: [
         external(),
+        json(),
         url({
             include: ['**/*.svg'],
             limit: 0,
@@ -44,9 +46,11 @@ export default {
             },
             extensions: ['.css'],
             minimize: true,
-            inject: {
-                insertAt: 'top',
-            },
+            extract: 'bundle.css',
+            modules: false,
+            use: ['sass'],
+            inject: false,
+            writeDefinitions: true,
         }),
         typescript({
             tsconfig: './tsconfig.json',
@@ -61,5 +65,9 @@ export default {
         commonjs(),
         terser(),
     ],
-    external: Object.keys(pkg.peerDependencies || {}),
+    external: [
+        ...Object.keys(pkg.peerDependencies || {}),
+        'canvas',
+        /node_modules/
+    ],
 };

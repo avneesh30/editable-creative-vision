@@ -1,20 +1,20 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
-import MyPlugin from './components/MyPlugin';
-
+import './index.css';
+import { MyPlugin } from './index1';
+import { TooltipProvider } from './components/ui/tooltip';
+import DesignEditor from './components/editor/DesignEditor';
+import { Toaster } from './components/ui/toaster';
+import { Toaster as Sonner } from './components/ui/sonner';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <MyPlugin
-          title="Welcome to My Plugin"
-          description="This is a beautiful component built with React and Tailwind CSS."
-          onClick={() => { }}
-        />
-      </header>
-    </div>
+      <div className="design-editor-plugin">
+        <TooltipProvider>
+          <DesignEditor {...{}} />
+          <Toaster />
+          <Sonner />
+        </TooltipProvider>
+      </div>
   );
 }
 
